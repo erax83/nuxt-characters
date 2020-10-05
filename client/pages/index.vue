@@ -2,36 +2,32 @@
   <div class="container">
     <div>
       <Logo />
-      <h1 class="title">
-        Home / Character Viewer
-      </h1>
+      <h1 class="title">Home / Character Viewer</h1>
       <nuxt-link to="/characterCreator">Character Creator</nuxt-link>
 
-      <p v-for="(character, index) in characters" v-bind:key="index">{{character.name}} is a {{character.profession}}!</p>
-      <button v-on:click="getCharacters">Refresh Characters</button>
-      </div>
+      <button v-on:click="getCharactersFromStore">Refresh Characters</button>
+
+      <p
+        v-for="(character, index) in this.$store.state.storeIndex.characters"
+        v-bind:key="index"
+      >{{character.name}} is a {{character.profession}}!</p>
     </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
-  data: function () {
-            return {
-                characters: null
-            }
-        },
-        methods: {
-            getCharacters: function () {
-                axios
-                    .get('http://localhost:8080/characters')
-                    .then(response => (this.characters = response.data))
-            }
-        },
-        mounted: function () {
-            this.getCharacters();
-        }
-}
+  methods: {
+    getCharactersFromStore() {
+      this.$store.dispatch("storeIndex/getFromDb");
+    },
+  },
+
+  mounted: function () {
+    this.getCharactersFromStore();
+  },
+};
 </script>
 
 <style>
@@ -45,16 +41,8 @@ export default {
 }
 
 .title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
